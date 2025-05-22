@@ -1,0 +1,38 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - data/modified_shemo.json
+    - src/preprocess.py
+    params:
+    - preprocess.input
+    - preprocess.output
+    - preprocess.random_state
+    outs:
+    - data/npy/
+  train:
+    cmd: python src/train.py
+    deps:
+    - data/npy/
+    - src/train.py
+    params:
+    - train.inputs_path
+    - train.models_path
+    - train.n_trials
+    - train.runs_path
+    outs:
+    - models/
+    - runs/
+  test:
+    cmd: python src/test.py
+    deps:
+    - models/
+    - runs/
+    - src/test.py
+    params:
+    - test.inputs_path
+    - test.models_path
+    - test.results_path
+    - test.runs_path
+    outs:
+    - results/

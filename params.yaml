@@ -1,0 +1,16 @@
+preprocess:
+  input: data/modified_shemo.json
+  output: data/npy/
+  random_state: 42
+
+train:
+  inputs_path: data/npy/
+  n_trials: 20
+  models_path: models/
+  runs_path: runs/
+
+test:
+  inputs_path: data/npy/
+  models_path: models/
+  runs_path: runs/
+  results_path: results/

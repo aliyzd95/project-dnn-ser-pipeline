@@ -1,0 +1,82 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/modified_shemo.json
+      hash: md5
+      md5: 509e82f26cb25ef7da467cd1d4e9a6a4
+      size: 1873499
+    - path: src/preprocess.py
+      hash: md5
+      md5: 048d4a8a3f323788b10ee61068f9b78f
+      size: 2376
+    params:
+      params.yaml:
+        preprocess.input: data/modified_shemo.json
+        preprocess.output: data/npy/
+        preprocess.random_state: 42
+    outs:
+    - path: data/npy/
+      hash: md5
+      md5: b015b526166cbade7e7f8bf547c368b8.dir
+      size: 1068992
+      nfiles: 4
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/npy/
+      hash: md5
+      md5: b015b526166cbade7e7f8bf547c368b8.dir
+      size: 1068992
+      nfiles: 4
+    - path: src/train.py
+      hash: md5
+      md5: 88067ec5891bba356c8172f37dcdb6ea
+      size: 6670
+    params:
+      params.yaml:
+        train.inputs_path: data/npy/
+        train.models_path: models/
+        train.n_trials: 20
+        train.runs_path: runs/
+    outs:
+    - path: models/
+      hash: md5
+      md5: b0e094bd3c5ace6768ea963d9b001706.dir
+      size: 19529962
+      nfiles: 5
+    - path: runs/
+      hash: md5
+      md5: 4c483b04d33ec000fe62cc3c1eed649e.dir
+      size: 160
+      nfiles: 5
+  test:
+    cmd: python src/test.py
+    deps:
+    - path: models/
+      hash: md5
+      md5: b0e094bd3c5ace6768ea963d9b001706.dir
+      size: 19529962
+      nfiles: 5
+    - path: runs/
+      hash: md5
+      md5: 4c483b04d33ec000fe62cc3c1eed649e.dir
+      size: 160
+      nfiles: 5
+    - path: src/test.py
+      hash: md5
+      md5: a61db2185050ee3f8417436d081536a6
+      size: 3229
+    params:
+      params.yaml:
+        test.inputs_path: data/npy/
+        test.models_path: models/
+        test.results_path: results/
+        test.runs_path: runs/
+    outs:
+    - path: results/
+      hash: md5
+      md5: b6fd0b488744c124f509814ce12474a7.dir
+      size: 182680
+      nfiles: 6
